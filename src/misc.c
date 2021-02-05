@@ -29,10 +29,15 @@ void init(void) {
 	Q_bool = bnone;
 	addglob("", 0, 0, 0, 0, 0, NULL, 0);
 	addglob("__SUBC__", 0, TMACRO, 0, 0, 0, globname(""), 0);
-	if (!strcmp(OS, "DOS"))
+	if (!strcmp(OS, "DOS")) {
 		addglob("__dos", 0, TMACRO, 0, 0, 0, globname(""), 0);
-	else
+	} else if (!strcmp(OS, "Darwin")) {
+		addglob("__APPLE__", 0, TMACRO, 0, 0, 0, globname(""), 0);
+		addglob("__MACH__", 0, TMACRO, 0, 0, 0, globname(""), 0);
+	}
+	else {
 		addglob("__unix", 0, TMACRO, 0, 0, 0, globname(""), 0);
+	}
 	Infile = stdin;
 	File = "(stdin)";
 	Basefile = NULL;

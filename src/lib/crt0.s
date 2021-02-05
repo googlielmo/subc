@@ -1,1 +1,0 @@
-../targets/dos-8086/crt0-dos-8086.s

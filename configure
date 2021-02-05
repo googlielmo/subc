@@ -97,6 +97,9 @@ if [ $os = dos ]; then
 elif [ $os = windows ]; then
 	(cd src; ln -fs ../targets/lib/init-windows.c lib/init.c)
 	(cd src; ln -fs ../targets/lib/system-windows.c lib/system.c)
+elif [ $os = darwin ]; then
+	(cd src; ln -fs ../targets/lib/init-darwin.c lib/init.c)
+	(cd src; ln -fs ../targets/lib/system-darwin.c lib/system.c)
 else
 	(cd src; ln -fs ../targets/lib/init-unix.c lib/init.c)
 	(cd src; ln -fs ../targets/lib/system-unix.c lib/system.c)

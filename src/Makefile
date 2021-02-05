@@ -1,4 +1,4 @@
-PREFIX=	/u
+PREFIX=	/usr/local
 EXESFX=	
 SCCDIR=	$(PREFIX)/scc
 BINDIR=	$(PREFIX)/bin
@@ -32,9 +32,20 @@ LIBOBJS=lib/init.o lib/abort.o lib/abs.o lib/atexit.o lib/atoi.o \
 	lib/tmpnam.o lib/ungetc.o lib/varargs.o lib/vformat.o \
 	lib/vfprintf.o lib/vprintf.o lib/vscan.o lib/vsprintf.o
 
-AS=	as
-AR=	ar -rc
-RANLIB=	ranlib
+OS := $(shell uname -s)
+ifeq ($(OS),Darwin)
+	export MACOSX_DEPLOYMENT_TARGET = 10.15
+	export ZERO_AR_DATE = 1
+	CC=	cc
+	AS=	as
+	AR=	ar -rc
+	RANLIB=	ranlib -D
+else
+	CC=	gcc
+	AS=	as
+	AR=	ar
+	RANLIB=	ranlib
+endif
 
 all:	scc0 crt0 ncrt0 lib
 
