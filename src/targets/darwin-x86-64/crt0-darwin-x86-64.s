@@ -3,7 +3,15 @@
 #	C runtime module for Darwin/x86-64
 #
 
-# Calling conventions: ?
+# Calling conventions as per System V Application Binary Interface:
+# If the class is MEMORY, pass the argument on the stack. If the size of an object is larger than four eight bytes, or
+# it contains unaligned fields, it has class MEMORY.
+# If the class is INTEGER, the next available register of the sequence %rdi, %rsi, %rdx, %rcx, %r8 and %r9 is used.
+# If the class is SSE, the next available vector register is used, the registers are taken in the order from %xmm0 to
+# %xmm7.
+# Once registers are assigned, the arguments passed in memory are pushed on the stack in reversed (right-to-left) order.
+# For calls that may call functions that use varargs or stdargs (prototype-less calls or calls to functions containing
+# ellipsis (...) in the declaration) %al is used as hidden argument to specify the number of vector registers used.
 
 	.data
 	.align	4

@@ -4,7 +4,19 @@ ARC=	subc-$(SNAP).tgz
 DIST=	subc-$(REL).tgz
 
 default:
-	@echo "Use ./configure instead."
+	@echo "Use './configure' followed by 'make scc' to build scc."
+
+configure: clean
+	./configure
+
+all:
+	cd src && make all
+
+scc:
+	cd src && make scc
+
+install: all
+	cd src && make install
 
 csums:
 	csum -u <_sums >_newsums ; mv -f _newsums _sums

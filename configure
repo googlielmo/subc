@@ -111,4 +111,4 @@ fi
 (cd src/lib && ln -fs ../targets/$os-$mac/crt0-$os-$mac.s crt0.s)
 (cd src/include && ln -fs ../targets/include/limits-$int.h limits.h)
 
-echo "Building for $os/$mac. Now cd to src and run make."
+echo "Build configured for $os/$mac."
