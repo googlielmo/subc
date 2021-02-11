@@ -24,15 +24,15 @@ echo
 rm -f $ASM
 
 if [ "`echo $S*`" != '_stage*' ]; then
-	
+
 	cat <<EOT
 ***************************************************
-	
+
 There appear to be some left-over stage files here:
 EOT
 	echo ${S}*
 cat <<EOT
-	
+
 You need to delete or rename them manually before
 running this test. Just in case they are important.
 
