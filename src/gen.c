@@ -561,24 +561,14 @@ void genexit(void) {
 	cgexit();
 }
 
-void genpush(void) {
-	gentext();
-	commit();
-	cgpush();
-}
-
-void genpushlit(int n) {
-	gentext();
-	commit();
-	spill();
-	cgpushlit(n);
-}
-
 void genstack(int n) {
-	if (n) {
-		gentext();
-		cgstack(n);
-	}
+	gentext();
+	cgstack(n);
+}
+
+void genalignstack(int n) {
+	gentext();
+	cgalignstack(n);
 }
 
 void genlocinit(void) {

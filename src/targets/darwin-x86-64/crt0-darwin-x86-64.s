@@ -33,35 +33,41 @@ StackAlignmentRAX:
 _main:
 	pushq	%rbp
 	movq	%rsp,%rbp
-        subq    $32, %rsp
-	
+    subq    $32, %rsp
+
+	# zero out InitialStackAlignment
 	xorq	%rax,%rax
 	movq	%rax,InitialStackAlignment(%rip)
+
+	# rsp & 15 [0-15] -> InitialStackAlignment [ after pushq %rbp ]
 	movq	%rsp,%rax
-	andb	$7,%al
+	andb	$0xf,%al
 	movb	%al,InitialStackAlignment(%rip)
-		
-        movl    %edi, -4(%rbp)	# argc
-        movq    %rsi, -16(%rbp)	# argv
-        movq    %rdx, -24(%rbp)	# envp
+
+	movl    %edi, -4(%rbp)	# argc
+	movq    %rsi, -16(%rbp)	# argv
+	movq    %rdx, -24(%rbp)	# envp
 
 	pushq	%rdi
 	call	C_init	#INIT
 	popq	%rdi
-	
+
 	movq	-24(%rbp),%rax
 	movq	%rax,Cenviron(%rip)
 	
-	xorq	%rcx,%rcx
 	movq	-16(%rbp), %rsi
 	pushq	%rsi		# argv
+	xorq	%rcx,%rcx
 	movl	-4(%rbp),%ecx
 	pushq	%rcx		# argc
 	call	Cmain
 	addq	$16,%rsp
 
-        addq    $32, %rsp
-        popq    %rbp
+    addq    $32, %rsp
+
+	movq	%rbp,%rsp
+	popq	%rbp
+
 	ret
 	
 # internal switch(expr) routine
@@ -225,6 +231,7 @@ C_creat:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_creat
+    cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -244,6 +251,7 @@ C_open:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_open
+    cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -262,6 +270,7 @@ C_close:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_close
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -278,8 +287,8 @@ C_unlink:
 	orb	InitialStackAlignment(%rip),%al
 	mov	%ax,%sp
 	movq	StackAlignmentRAX(%rip),%rax
-	xorq	%rax,%rax
 	call	_unlink
+    cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -299,6 +308,7 @@ C_rename:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_rename
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -315,6 +325,7 @@ C_fork:
 	mov	%ax,%sp
 	movq	StackAlignmentRAX(%rip),%rax
 	call	_fork
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -335,6 +346,7 @@ C_wait:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_wait
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	movq	8(%rsp),%rdx			# rc
 	pushq	%rax
@@ -367,8 +379,8 @@ C_execve:
 	orb	InitialStackAlignment(%rip),%al
 	mov	%ax,%sp
 	movq	StackAlignmentRAX(%rip),%rax
-	xorq	%rax,%rax
 	call	_execve
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -385,7 +397,6 @@ C_time:
 	orb	InitialStackAlignment(%rip),%al
 	mov	%ax,%sp
 	movq	StackAlignmentRAX(%rip),%rax
-	xorq	%rax,%rax
 	call	_time
 	movq 	StackAlignment(%rip),%rsp
 	ret
@@ -404,6 +415,7 @@ Craise:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_getpid
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	movq	%rax,%rdi
 	movq	8(%rsp),%rsi			# sig
@@ -417,6 +429,7 @@ Craise:
 	movq	StackAlignmentRAX(%rip),%rax
 	xorq	%rax,%rax
 	call	_kill
+	cltq
 	movq 	StackAlignment(%rip),%rsp
 	ret
 
@@ -434,7 +447,6 @@ Csignal:
 	orb	InitialStackAlignment(%rip),%al
 	mov	%ax,%sp
 	movq	StackAlignmentRAX(%rip),%rax
-	xorq	%rax,%rax
 	call	_signal
 	movq 	StackAlignment(%rip),%rsp
 	ret
