@@ -18,32 +18,13 @@
 	.globl	Cenviron
 Cenviron:
 	.quad	0
-	
-	.data
-	.align	4
-InitialStackAlignment:
-	.quad	0
-StackAlignment:
-	.quad	0
-StackAlignmentRAX:
-	.quad	0
-	
+
 	.text
 	.globl	_main
 _main:
 	pushq	%rbp
 	movq	%rsp,%rbp
-    subq    $32, %rsp
-
-	# zero out InitialStackAlignment
-	xorq	%rax,%rax
-	movq	%rax,InitialStackAlignment(%rip)
-
-	# rsp & 15 [0-15] -> InitialStackAlignment [ after pushq %rbp ]
-	movq	%rsp,%rax
-	andb	$0xf,%al
-	movb	%al,InitialStackAlignment(%rip)
-
+	subq    $32, %rsp
 	movl    %edi, -4(%rbp)	# argc
 	movq    %rsi, -16(%rbp)	# argv
 	movq    %rdx, -24(%rbp)	# envp
@@ -54,7 +35,7 @@ _main:
 
 	movq	-24(%rbp),%rax
 	movq	%rax,Cenviron(%rip)
-	
+
 	movq	-16(%rbp), %rsi
 	pushq	%rsi		# argv
 	xorq	%rcx,%rcx
@@ -63,13 +44,11 @@ _main:
 	call	Cmain
 	addq	$16,%rsp
 
-    addq    $32, %rsp
-
+	addq    $32, %rsp
 	movq	%rbp,%rsp
 	popq	%rbp
-
 	ret
-	
+
 # internal switch(expr) routine
 # %rsi = switch table, %rax = expr
 	.text
@@ -125,16 +104,14 @@ vok:	movq	8(%rsp),%rdx	# env
 	.globl	C_exit
 C_exit:
 	movq	8(%rsp),%rdi			# rc
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
+
 	call	_exit
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _sbrk(int size);
@@ -142,17 +119,15 @@ C_exit:
 	.globl	C_sbrk
 C_sbrk:
 	movq	8(%rsp),%rdi			# size
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_sbrk
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _write(int fd, void *buf, int len);
@@ -162,17 +137,15 @@ C_write:
 	movq	24(%rsp),%rdx			# len
 	movq	16(%rsp),%rsi			# buf
 	movq	8(%rsp),%rdi			# fd
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_write
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _read(int fd, void *buf, int len);
@@ -182,17 +155,15 @@ C_read:
 	movq	24(%rsp),%rdx			# len
 	movq	16(%rsp),%rsi			# buf
 	movq	8(%rsp),%rdi			# fd
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_read
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _lseek(int fd, int pos, int how);
@@ -202,17 +173,15 @@ C_lseek:
 	movq	24(%rsp),%rdx			# how
 	movq	16(%rsp),%rsi			# pos
 	movq	8(%rsp),%rdi			# fd
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_lseek
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _creat(char *path, int mode);
@@ -221,18 +190,16 @@ C_lseek:
 C_creat:
 	movq	16(%rsp),%rsi			# mode
 	movq	8(%rsp),%rdi			# path
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_creat
-    cltq
-	movq 	StackAlignment(%rip),%rsp
+	cltq
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _open(char *path, int flags);
@@ -241,18 +208,16 @@ C_creat:
 C_open:
 	movq	16(%rsp),%rsi			# flags
 	movq	8(%rsp),%rdi			# path
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_open
-    cltq
-	movq 	StackAlignment(%rip),%rsp
+	cltq
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _close(int fd);
@@ -260,18 +225,16 @@ C_open:
 	.globl	C_close
 C_close:
 	movq	8(%rsp),%rdi			# fd
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_close
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _unlink(char *path);
@@ -279,17 +242,15 @@ C_close:
 	.globl	C_unlink
 C_unlink:
 	movq	8(%rsp),%rdi			# path
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
+
 	call	_unlink
-    cltq
-	movq 	StackAlignment(%rip),%rsp
+	cltq
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _rename(char *old, char *new);
@@ -298,35 +259,31 @@ C_unlink:
 C_rename:
 	movq	16(%rsp),%rsi			# new
 	movq	8(%rsp),%rdi			# old
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_rename
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _fork(void);
 	.text
 	.globl	C_fork
 C_fork:
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
+
 	call	_fork
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _wait(int *rc);
@@ -336,18 +293,17 @@ ww:	.quad	0
 	.globl	C_wait
 C_wait:
 	leaq	ww(%rip),%rdi
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_wait
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
+
 	movq	8(%rsp),%rdx			# rc
 	pushq	%rax
 	pushq	%rbx
@@ -371,17 +327,15 @@ C_execve:
 	movq	24(%rsp),%rdx			# envp
 	movq	16(%rsp),%rsi			# argv
 	movq	8(%rsp),%rdi			# path
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
+
 	call	_execve
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int _time(void);
@@ -389,48 +343,44 @@ C_execve:
 	.globl	C_time
 C_time:
 	xorq	%rdi,%rdi
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
+
 	call	_time
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int raise(int sig);
 	.text
 	.globl	Craise
 Craise:
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_getpid
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
+
 	movq	%rax,%rdi
 	movq	8(%rsp),%rsi			# sig
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
 	xorq	%rax,%rax
+
 	call	_kill
 	cltq
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
 
 # int signal(int sig, int (*fn)());
@@ -439,14 +389,12 @@ Craise:
 Csignal:
 	movq	16(%rsp),%rsi			# fn
 	movq	8(%rsp),%rdi			# sig
-	movq	%rax,StackAlignmentRAX(%rip)
-	movq 	%rsp,StackAlignment(%rip)
-	subq	$16,%rsp
-	mov	%sp,%ax
-	andb	$240,%al
-	orb	InitialStackAlignment(%rip),%al
-	mov	%ax,%sp
-	movq	StackAlignmentRAX(%rip),%rax
+	pushq   %rbp
+	movq    %rsp,%rbp
+	andq    $~0xf,%rsp
+
 	call	_signal
-	movq 	StackAlignment(%rip),%rsp
+
+	movq    %rbp,%rsp
+	popq    %rbp
 	ret
