@@ -560,11 +560,6 @@ void genstack(int n) {
 	cgstack(n);
 }
 
-void genalignstack(int n) {
-	gentext();
-	cgalignstack(n);
-}
-
 void genlocinit(void) {
 	int	i;
 
