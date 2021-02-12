@@ -244,8 +244,6 @@ void cgstorgw(char *s)	{ sgen("%s\t%%rax,%s(%%rip)", "movq", s); }
 void cginitlw(int v, int a)	{ ngen2("%s\t$%d,%d(%%rbp)", "movq", v, a); }
 void cgcall(char *s)	{ sgen("%s\t%s", "call", s); }
 void cgcalr(void)	{ gen("call\t*%rax"); }
-void cgalignstack(int n)        { n = (2 * n) % 16;
-				  if (n) ngen("%s\t$%d,%%rsp", "subq", n);}
 void cgstack(int n)	{ n += (2 * n) % 16;
 			  if (n) ngen("%s\t$%d,%%rsp", "addq", n); }
 void cgentry(void)	{ gen("pushq\t%rbp");

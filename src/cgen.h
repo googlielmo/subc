@@ -108,7 +108,6 @@ void cgscale2by(int v);
 void cgscaleby(int v);
 void cgshl(void);
 void cgshr(void);
-void cgalignstack(int n);
 void cgstack(int n);
 void cgstorgb(char *s);
 void cgstorgw(char *s);

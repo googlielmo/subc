@@ -201,10 +201,6 @@ void emitcond(node *a, int ex) {
 	emittree1(a->right);
 }
 
-void preargs(int n) {
-	genalignstack(n * BPW);
-}
-
 void postargs(int n) {
 	genstack(n * BPW);
 }
@@ -332,15 +328,13 @@ static void emittree1(node *a) {
 			case OP_SUB:	gensub(a->args[0], a->args[1], 1); break;
 			}
 			break;
-	case OP_CALL:	preargs(a->args[1]);
-			emitargs(a->left);
+	case OP_CALL:	emitargs(a->left);
 			commit();
 			spill();
 			gencall(a->args[0]);
 			postargs(a->args[1]);
 			break;
-	case OP_CALR:	preargs(a->args[1]);
-			emitargs(a->left);
+	case OP_CALR:	emitargs(a->left);
 			commit();
 			spill();
 			clear(0);
