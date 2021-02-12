@@ -310,9 +310,9 @@ C_wait:
 	movq	ww(%rip),%rax
 	andb	$127,%al
 	xorq	%rbx,%rbx
-	movb	%ah,%bl
+	movb	%al,%bh
 	test	%al,%al
-	jz	wait_bye
+	jnz	wait_bye
 	movq	ww(%rip),%rbx
 wait_bye:
 	movq	%rbx,(%rdx)
