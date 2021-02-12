@@ -441,12 +441,6 @@ void genscale(void) {
 	cgscale();
 }
 
-void genscale2(void) {
-	gentext();
-	commit();
-	cgscale2();
-}
-
 void genscaleby(int v) {
 	gentext();
 	commit();
