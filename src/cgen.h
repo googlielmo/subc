@@ -102,7 +102,6 @@ void cgpostlude(void);
 void cgprelude(void);
 void cgpublic(char *s);
 void cgpush(void);
-void cgpushlit(int n);
 void cgscale(void);
 void cgscale2(void);
 void cgscale2by(int v);
