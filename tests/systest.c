@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 	n = _sbrk(1024);
 	m = _sbrk(-1024);
 	k = _sbrk(0);
-	if (n + 1024 != m || k != n)
+	if (n + 1024 != m || k != m)
 		error("_sbrk()");
 
 	if (verbose) kprintf(1, "creat\n");
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
 		case -1:
 			error("_fork()");
 			break;
-		case 0:	
+		case 0:
 			_exit(i);
 		default:
 			_wait(&j);
@@ -244,7 +244,7 @@ int main(int argc, char **argv) {
 	case 0:
 		a[0] = "./systest";
 		a[1] = "e";
-		a[2];
+		a[2] = NULL;
 		e[0] = "FOO=BAR";
 		e[1] = NULL;
 		_execve("./systest", a, e);
