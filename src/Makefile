@@ -1,5 +1,5 @@
 PREFIX=	/usr/local
-EXESFX=	
+EXESFX=
 SCCDIR=	$(PREFIX)/scc
 BINDIR=	$(PREFIX)/bin
 SC86DIR=$(PREFIX)/scc86
@@ -43,8 +43,8 @@ ifeq ($(OS),Darwin)
 else
 	CC=	gcc
 	AS=	as
-	AR=	ar
-	RANLIB=	ranlib
+	AR=	ar -rcD
+	RANLIB=	ranlib -D
 endif
 
 all:	scc0 crt0 ncrt0 lib
