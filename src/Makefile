@@ -141,6 +141,7 @@ install:	all
 	./scc0 -o scc -D 'SCCDIR="$(SCCDIR)"' $(SRC)
 	cp scc $(BINDIR)/scc$(EXESFX)
 	strip $(BINDIR)/scc$(EXESFX)
+	mkdir -p $(SCCDIR)/include $(SCCDIR)/lib
 	cp include/* $(SCCDIR)/include
 	cp lib/libscc.a lib/crt0.o lib/ncrt0.o $(SCCDIR)/lib
 
@@ -148,6 +149,7 @@ install-scc86:	all
 	scc -o scc86 -D 'SCCDIR="$(SC86DIR)"' $(SRC)
 	cp scc86 $(BINDIR)/scc86$(EXESFX)
 	strip $(BINDIR)/scc86$(EXESFX)
+	mkdir -p $(SC86DIR)/include $(SC86DIR)/lib
 	cp include/* $(SC86DIR)/include
 	cp lib/libscc.a lib/crt0.o lib/ncrt0.o $(SC86DIR)/lib
 
