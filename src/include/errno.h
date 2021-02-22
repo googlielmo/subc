@@ -12,3 +12,4 @@ extern int errno;
 #define ENFILE	4
 #define EINVAL	5
 #define ENOMEM	6
+#define ENOSYS	7
