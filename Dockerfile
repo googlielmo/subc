@@ -1,5 +1,4 @@
 FROM gcc
-COPY . /usr/src/subc
+RUN apt-get update -y
+RUN apt-get install -y vim man manpages libc6-dev less
 WORKDIR /usr/src/subc
-RUN make clean configure
-#CMD [""]

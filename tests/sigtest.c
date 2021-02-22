@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
+#include <errno.h>
 
 int	Errors = 0;
 
@@ -29,12 +30,18 @@ int main(int argc, char **argv) {
 	kprintf(1, "your lib/crt0.s file for hints.\n");
 	kprintf(1, "If there are none, please mail the author!\n");
 	kprintf(1, "==========================================\n");
-	signal(SIGABRT, catch);
-	raise(SIGABRT);
-	if (!caught) fail("signal-1");
-	caught = 0;
-	signal(SIGABRT, SIG_IGN);
-	raise(SIGABRT);
-	if (caught) fail("signal-1");
+	if (signal(SIGABRT, catch) == 2)
+		if (errno == ENOSYS)
+			puts("signal(3) not implemented on this target");
+		else
+			fail("signal-1");
+	else {
+		raise(SIGABRT);
+		if (!caught) fail("signal-2");
+		caught = 0;
+		signal(SIGABRT, SIG_IGN);
+		raise(SIGABRT);
+		if (caught) fail("signal-3");
+	}
 	return Errors? EXIT_FAILURE: EXIT_SUCCESS;
 }

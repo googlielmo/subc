@@ -4,7 +4,12 @@ ARC=	subc-$(SNAP).tgz
 DIST=	subc-$(REL).tgz
 
 default:
-	@echo "Use './configure' followed by 'make scc' to build scc."
+	@echo "Valid targets include:"
+	@echo
+	@echo "	configure"
+	@echo "	scc"
+	@echo "	docker-build"
+	@echo "	docker-run"
 
 configure: clean
 	./configure
@@ -17,6 +22,9 @@ scc:
 
 install: all
 	cd src && make install
+
+tests: all
+	cd src && make tests
 
 csums:
 	csum -u <_sums >_newsums ; mv -f _newsums _sums
@@ -41,3 +49,9 @@ arc:	clean
 
 dist:	clean
 	(cd .. && tar cvfz $(DIST) subc) && mv ../$(DIST) .
+
+docker-build:
+	docker build . -t subc
+
+docker-run:
+	docker run --mount src="`pwd`",target=/usr/src/subc,type=bind -it subc

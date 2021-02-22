@@ -267,10 +267,10 @@ Craise:
 	syscall
 	ret
 
-# int signal(int sig, int (*fn)());
+# int _signal(int sig, int (*fn)());
 
-	.globl	Csignal
-Csignal:
+	.globl	C_signal
+C_signal:
 
 #	If your signal handlers segfault, uncomment the below code
 #	and link against /usr/lib/libc.a.
@@ -280,23 +280,31 @@ Csignal:
 #	call	signal
 #	ret
 
-	movq	16(%rsp),%rax	# fn
-	movq	%rax,-32(%rsp)
-	movq	$0x10000000,-24(%rsp)	# SA_RESTART
-	xorq	%rax,%rax
-	movq	%rax,-16(%rsp)
-	movq	%rax,-8(%rsp)
-	movq	8(%rsp),%rdi	# sig
-	leaq	-32(%rsp),%rsi
-	leaq	-64(%rsp),%rdx
-	movq	$8,%r10
-	movq	$13,%rax
-	syscall
-	cmpq	$0,%rax
-	jz	1f
-	movq	$2,%rax	# SIG_ERR
-	ret
-1:
-	movq	-64(%rsp),%rax
-	ret
+	pushq	%rbp
+	movq	%rsp,%rbp
+	subq    $304,%rsp
 
+	movq	24(%rbp),%rax	# fn
+	movq	%rax,-32(%rbp)
+	movq	$0x10000000,-24(%rbp)	# SA_RESTART
+	xorq	%rax,%rax
+	movq	%rax,-16(%rbp)
+	movq	%rax,-8(%rbp)
+	movq	16(%rbp),%rdi	# int sig
+	leaq	-152(%rbp),%rsi	# struct sigaction *act
+	leaq	-304(%rbp),%rdx	# struct sigaction *oldact
+	movq	$128,%r10	# sizeof(sigset_t)
+
+	movq	$13,%rax	# sys_rt_sigaction
+	syscall
+
+	cmpq	$0,%rax
+	jz	sig_ok
+	movq	$2,%rax	# SIG_ERR
+	jmp	sig_exit
+sig_ok:
+	movq	-304(%rbp),%rax
+sig_exit:
+	addq	$304,%rsp
+	popq	%rbp
+	ret
