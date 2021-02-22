@@ -10,6 +10,8 @@ default:
 	@echo "	scc"
 	@echo "	docker-build"
 	@echo "	docker-run"
+	@echo
+	@echo "Use 'make configure' followed by 'make scc' to build scc."
 
 configure: clean
 	./configure

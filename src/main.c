@@ -9,6 +9,11 @@
 #undef extern_
 #include "decl.h"
 
+/* for `make lint` */
+#ifdef __STRICT_ANSI__
+ char *strdup(const char *);
+#endif
+
 static void cmderror(char *s, char *a) {
 	fprintf(stderr, "scc: ");
 	fprintf(stderr, s, a);
