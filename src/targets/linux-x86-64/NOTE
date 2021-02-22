@@ -1,8 +1,10 @@
-The signal() function of this port may cause handlers to segfault.
+The signal() function of this port returns ENOSYS (not implemented).
+You can try to use _signal() at your risk instead.
+The _signal() function may cause handlers to segfault.
 In this case, you can either
-- uncomment the alternative signal() function in
+- uncomment the alternative _signal() function in
   src/targets/linux-x86-64/crt0-linux-x86-64.s
   and set SYSLIBC to "/usr/lib/libc.a" in
   src/targets/linux-x86-64/sys-linux-x86-64.h
   (resulting in massively bloated executables)
-- or, just not use signal() in your code, if that's an option.
+- or, just not use signal()/_signal() in your code, if that's an option.
