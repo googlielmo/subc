@@ -201,6 +201,10 @@ void emitcond(node *a, int ex) {
 	emittree1(a->right);
 }
 
+void postargs(int n) {
+	genstack(n * BPW);
+}
+
 void emitargs(node *a) {
 	if (NULL == a) return;
 	emittree1(a->right);
@@ -320,16 +324,15 @@ static void emittree1(node *a) {
 			case OP_BINXOR:	genxor(); break;
 			case OP_MUL:	genmul(); break;
 			case OP_ADD:	genadd(PINT, PINT, 1); break;
-			case OP_PLUS:	genadd(a->args[0], a->args[1], 1);
-					break;
-			case OP_SUB:	gensub(a->args[0], a->args[1], 1);						break;
+			case OP_PLUS:	genadd(a->args[0], a->args[1], 1); break;
+			case OP_SUB:	gensub(a->args[0], a->args[1], 1); break;
 			}
 			break;
 	case OP_CALL:	emitargs(a->left);
 			commit();
 			spill();
 			gencall(a->args[0]);
-			genstack((a->args[1]) * BPW);
+			postargs(a->args[1]);
 			break;
 	case OP_CALR:	emitargs(a->left);
 			commit();
@@ -339,7 +342,7 @@ static void emittree1(node *a) {
 			lv[LVSYM] = a->args[0];
 			genrval(lv);
 			gencalr();
-			genstack((a->args[1]) * BPW);
+			postargs(a->args[1]);
 			break;
 	case OP_ASSIGN: if (OP_IDENT == a->left->op) {
 				emittree1(a->right);

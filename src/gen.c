@@ -441,12 +441,6 @@ void genscale(void) {
 	cgscale();
 }
 
-void genscale2(void) {
-	gentext();
-	commit();
-	cgscale2();
-}
-
 void genscaleby(int v) {
 	gentext();
 	commit();
@@ -561,24 +555,9 @@ void genexit(void) {
 	cgexit();
 }
 
-void genpush(void) {
-	gentext();
-	commit();
-	cgpush();
-}
-
-void genpushlit(int n) {
-	gentext();
-	commit();
-	spill();
-	cgpushlit(n);
-}
-
 void genstack(int n) {
-	if (n) {
-		gentext();
-		cgstack(n);
-	}
+	gentext();
+	cgstack(n);
 }
 
 void genlocinit(void) {

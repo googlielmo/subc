@@ -56,7 +56,7 @@ Linux/i686)		os=linux   ; mac=386     ; int=32 ;;
 Linux/x86_64)		os=linux   ; mac=x86-64  ; int=64 ;;
 MINGW32_NT-6.1/i686)	os=windows ; mac=386     ; int=32 ;;
 MINGW32_NT-5.1/i686)	os=windows ; mac=386     ; int=32 ;;
-Darwin/x86_64)		os=darwin  ; mac=x86-64  ; int=64 ; stat=untested
+Darwin/x86_64)		os=darwin  ; mac=x86-64  ; int=64 ; stat=EXPERIMENTAL
 			opt="-darwin"
 			;;
 DOS/8086)		os=dos     ; mac=8086   ; int=16 ; stat=EXPERIMENTAL
@@ -97,6 +97,9 @@ if [ $os = dos ]; then
 elif [ $os = windows ]; then
 	(cd src; ln -fs ../targets/lib/init-windows.c lib/init.c)
 	(cd src; ln -fs ../targets/lib/system-windows.c lib/system.c)
+elif [ $os = darwin ]; then
+	(cd src; ln -fs ../targets/lib/init-darwin.c lib/init.c)
+	(cd src; ln -fs ../targets/lib/system-darwin.c lib/system.c)
 else
 	(cd src; ln -fs ../targets/lib/init-unix.c lib/init.c)
 	(cd src; ln -fs ../targets/lib/system-unix.c lib/system.c)
@@ -108,4 +111,4 @@ fi
 (cd src/lib && ln -fs ../targets/$os-$mac/crt0-$os-$mac.s crt0.s)
 (cd src/include && ln -fs ../targets/include/limits-$int.h limits.h)
 
-echo "Building for $os/$mac. Now cd to src and run make."
+echo "Build configured for $os/$mac."
