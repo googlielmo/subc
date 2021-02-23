@@ -5,21 +5,35 @@ SubC Compiler
     By Nils M Holm, 2011—2016 
     Placed in the public domain
 
+The original
+[SubC compiler](http://www.t3x.org/subc/)
+is described in the excellent book
+[Practical Compiler Construction](http://www.t3x.org/reload/index.html)
+by Nils M Holm.
+
+The current version starts out from the latest compiler code
+available from Nils' website:
+[subc-20161212.tgz](http://www.t3x.org/subc/subc-20161212.tgz).
+
+
 WHAT'S NEW
 ----------
 
-Updated by Guglielmo Nigri (@googlielmo), 2021.
+Updated by Guglielmo Nigri
+([@googlielmo](https://github.com/googlielmo)), 2021.
 
-Source: https://github.com/googlielmo/subc
+Source code available at: https://github.com/googlielmo/subc
 
-- Darwin target now working on macOS 10.15 and 11.1
-- Ongoing work to update Linux x86-64 target
+- Darwin target now *stable* (tested on macOS 10.15 and 11.1)
+- Ongoing work to update Linux x86-64 target to the latest tool 
+  chain
 - Docker support
 
-The rest of this documents is being updated to track the
-ongoing development.
+The rest of this document is being updated to track the ongoing
+development.
 
 Please see [README_ORIG](README_ORIG) for the original README.
+
 
 SUMMARY
 -------
@@ -44,6 +58,30 @@ available) and typically small due to a non-bloated library). It
 uses a simple optimizer on per-expression basis.
 
 
+QUICKSTART
+----------
+
+On supported systems this is the quickest way to compile and
+install the `scc` compiler.
+
+Make sure you have the system C compiler on your path.
+
+Configure the target system:
+
+      make configure
+
+Bootstrap the SubC compiler to check everything is in order:
+
+      make scc
+
+Install the compiler:
+
+      make install
+
+Of course, you can also build and install manually.
+See below for detailed instructions.
+
+
 SUPPORTED SYSTEMS
 -----------------
 
@@ -66,7 +104,7 @@ following processors and operating systems:
 
 Platforms tagged "untested" are not regularly tested by myself
 and are therefore subject to potential bit rot. You can help
-me improve SubC by running "make tests" on an "untested"
+me improve SubC by running `make tests` on an "untested"
 platform and let me know about the results.
 
 Platforms using the system's libc as a thin system call layer
@@ -75,7 +113,7 @@ the GNU libc, which is not "thin" at all. Expect trouble on
 those systems!
 
 On Darwin/macOS the system libc is being used (not the GNU libc),
-which is linked dynamically and it's actually required for
+which is linked dynamically and is actually required for
 issuing system calls in a portable way.
 
 Platforms tagged "broken" currently will not compile or run
@@ -114,9 +152,9 @@ in "Practical Compiler Construction":
 
 *  extern identifiers may now be declared locally.
 
-*  Prototypes may have the static storage class.
+*  Prototypes may have the `static` storage class.
 
-*  There is support for structs and unions.
+*  There is support for `struct` and `union` data types.
 
 *  `jmp_buf` is now a struct; `setjmp()` and `longjmp()` must be
    called with `&jmp_buf`.
@@ -158,8 +196,8 @@ DIFFERENCES BETWEEN SUBC (THIS VERSION) AND FULL C89
 ----------------------------------------------------
 
 *  The following keywords are not recognized:
-   `const`, `double`, `float`, `goto`, `long`, `short`, `signed`, `typedef`,
-   `unsigned`.
+   `const`, `double`, `float`, `goto`, `long`, `short`,
+   `signed`, `typedef`, `unsigned`.
 
 *  There are only two primitive data types: the signed `int` and
    the unsigned `char`; there are also void pointers, and there
@@ -236,7 +274,8 @@ DIFFERENCES BETWEEN SUBC (THIS VERSION) AND FULL C89
    `int(*)()` manually.
 
 *  Most of the time-related functions are missing, in particular:
-   `asctime()`, `gmtime()`, `localtime()`, `mktime()`, and `strftime()`.
+   `asctime()`, `gmtime()`, `localtime()`, `mktime()`,
+   and `strftime()`.
 
 *  The `clock()` function is missing, because `CLOCKS_PER_SEC`
    varies among systems.
@@ -252,7 +291,8 @@ SELECTING A TARGET PLATFORM
 ---------------------------
 
 The easiest way to prepare a build is to run the `configure`
-script in this directory ("`make configure`" also works).
+script in this directory (`make configure` also works).
+
 Don't worry, it is just a simple script that will figure out
 the host platform via uname and link a few machine-dependent 
 files into place.
@@ -294,13 +334,13 @@ reflects the machine word size of your target and link it to
 COMPILING THE COMPILER
 ----------------------
 
-The compiler sources are contained in the "src" directory,
+The compiler sources are contained in the `src` directory,
 so all the subsequent steps assume that this is your current
 working directory. (I.e. do a `cd src` now.)
 
 On a supported system, just type `make scc`.
 
-Without "make" the compiler can be bootstrapped by running:
+Without `make` the compiler can be bootstrapped by running:
 
     cc -o scc0 *.c
 
@@ -369,6 +409,7 @@ Please see the NOTES-WINDOWS file!
 
 
 THANKS
+------
 
 To the Super Dimension Fortress (SDF.ORG) for providing
 free shell accounts on 64-bit NetBSD machines.
