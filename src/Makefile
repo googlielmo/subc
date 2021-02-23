@@ -1,5 +1,5 @@
 PREFIX=	/usr/local
-EXESFX=	
+EXESFX=
 SCCDIR=	$(PREFIX)/scc
 BINDIR=	$(PREFIX)/bin
 SC86DIR=$(PREFIX)/scc86
@@ -43,8 +43,8 @@ ifeq ($(OS),Darwin)
 else
 	CC=	gcc
 	AS=	as
-	AR=	ar
-	RANLIB=	ranlib
+	AR=	ar -rcD
+	RANLIB=	ranlib -D
 endif
 
 all:	scc0 crt0 ncrt0 lib
@@ -141,6 +141,7 @@ install:	all
 	./scc0 -o scc -D 'SCCDIR="$(SCCDIR)"' $(SRC)
 	cp scc $(BINDIR)/scc$(EXESFX)
 	strip $(BINDIR)/scc$(EXESFX)
+	mkdir -p $(SCCDIR)/include $(SCCDIR)/lib
 	cp include/* $(SCCDIR)/include
 	cp lib/libscc.a lib/crt0.o lib/ncrt0.o $(SCCDIR)/lib
 
@@ -148,6 +149,7 @@ install-scc86:	all
 	scc -o scc86 -D 'SCCDIR="$(SC86DIR)"' $(SRC)
 	cp scc86 $(BINDIR)/scc86$(EXESFX)
 	strip $(BINDIR)/scc86$(EXESFX)
+	mkdir -p $(SC86DIR)/include $(SC86DIR)/lib
 	cp include/* $(SC86DIR)/include
 	cp lib/libscc.a lib/crt0.o lib/ncrt0.o $(SC86DIR)/lib
 
