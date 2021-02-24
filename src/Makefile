@@ -194,4 +194,4 @@ lint:
 
 clean:
 	rm -f scc0 scc1 scc2 scc scc86 test.s *.o *.core core a.out \
-		*.tmp lib/*.o lib/ncrt0.s lib/libscc.a *.exe subc-dos.zip
+		*.tmp lib/*.o lib/init.s lib/ncrt0.s lib/libscc.a *.exe subc-dos.zip
