@@ -58,8 +58,15 @@ int main(int argc, char **argv) {
 	n = _sbrk(1024);
 	m = _sbrk(-1024);
 	k = _sbrk(0);
-	if (n + 1024 != m || k != m)
-		error("_sbrk()");
+	if (n + 1024 != m)
+		error("_sbrk() (1)");
+#ifdef __MACH__
+	if (k != m)
+		error("_sbrk() (2)");
+#else
+	if (k != n)
+		error("_sbrk() (3)");
+#endif
 
 	if (verbose) kprintf(1, "creat\n");
 	fd  = _creat(TESTFILE, 0644);
