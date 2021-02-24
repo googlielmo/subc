@@ -4,6 +4,6 @@
  */
 
 #define OS		"Linux"
-#define ASCMD		"as -o %s %s"
-#define LDCMD		"ld -o %s %s/lib/%scrt0.o"
+#define ASCMD		"as --32 -o %s %s"
+#define LDCMD		"ld -m elf_i386 -o %s %s/lib/%scrt0.o"
 #define SYSLIBC		""
