@@ -56,7 +56,7 @@ Linux/i686)		os=linux   ; mac=386     ; int=32 ;;
 Linux/x86_64)		os=linux   ; mac=x86-64  ; int=64 ;;
 MINGW32_NT-6.1/i686)	os=windows ; mac=386     ; int=32 ;;
 MINGW32_NT-5.1/i686)	os=windows ; mac=386     ; int=32 ;;
-Darwin/x86_64)		os=darwin  ; mac=x86-64  ; int=64 ; stat=EXPERIMENTAL
+Darwin/x86_64)		os=darwin  ; mac=x86-64  ; int=64 ; stat=
 			opt="-darwin"
 			;;
 DOS/8086)		os=dos     ; mac=8086   ; int=16 ; stat=EXPERIMENTAL

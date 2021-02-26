@@ -36,16 +36,11 @@ OS := $(shell uname -s)
 ifeq ($(OS),Darwin)
 	export MACOSX_DEPLOYMENT_TARGET = 10.15
 	export ZERO_AR_DATE = 1
-	CC=	cc
-	AS=	as
-	AR=	ar -rc
-	RANLIB=	ranlib -D
-else
-	CC=	gcc
-	AS=	as
-	AR=	ar -rcD
-	RANLIB=	ranlib -D
 endif
+
+AS=	as
+AR=	ar -rc
+RANLIB=	ranlib -D
 
 all:	scc0 crt0 ncrt0 lib
 

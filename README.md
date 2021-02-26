@@ -70,9 +70,9 @@ Configure the target system:
 
       make configure
 
-Bootstrap the SubC compiler to check everything is in order:
+Bootstrap the compiler and check everything is in order:
 
-      make scc
+      make tests
 
 Install the compiler:
 

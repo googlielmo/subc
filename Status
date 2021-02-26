@@ -2,6 +2,20 @@
 
 	SUBC BUILD STATUS
 
+	macOS Darwin/x86-64 11.1, clang 12.0.0, SubC 20210226
+		triple test	passed
+		ptest		passed
+		systest		passed
+		libtest		passed
+		signal()	works
+
+	Debian Linux/x86-64 10.8, gcc 10.2.0, SubC 20210226
+		triple test	passed
+		ptest		passed
+		systest		passed
+		libtest		passed
+		signal()	n/a
+
 	FreeBSD/x86-64 10.1-RELEASE, clang 3.4.1, SubC 20161124
 		triple test	passed
 		ptest		passed
@@ -17,11 +31,11 @@
 		signal()	works
 
 	NetBSD/386 7.0.1-RELEASE, gcc 4.8.4, SubC 20160726
-		triple test     passed                                          
-		ptest           passed                                          
-		systest         passed                                          
-		libtest         passed                                          
-		signal()        works                                           
+		triple test     passed
+		ptest           passed
+		systest         passed
+		libtest         passed
+		signal()        works
 
 	FreeBSD/386 8.2-RELEASE, gcc 4.2.1, SubC 20140525
 		triple test	passed
@@ -71,4 +85,3 @@
 		systest		passed (except unimplemented)
 		libtest		passed
 		signal()	n/a
-

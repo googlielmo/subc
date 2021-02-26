@@ -10,6 +10,8 @@ a.out
 aout.exe
 core
 debug
+_oldsums
+_newsums
 
 s86/s86
 s86/sar
@@ -25,10 +27,11 @@ src/lib/crt0.s
 src/lib/init.c
 src/lib/ncrt0.s
 src/lib/system.c
+src/sys.h
+
 src/scc
 src/scc0
 src/scc1
-src/sys.h
 
 tests/ptest.c
 tests/ptest

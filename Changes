@@ -1,3 +1,26 @@
+2021-02-26 Update Makefile sums target, prepare release version 20210226
+2021-02-24 Docs: Update darwin-x86-64/NOTE, mark port as "stable"
+2021-02-24 Fix: systest.c, adjust test for different semantics of sbrk(2)
+2021-02-24 Fix: sys-linux-386.h, allow targeting i386 on 64-bit machine
+2021-02-24 Fix: Makefile, clean lib/init.s
+2021-02-23 Docs: Update README.md
+2021-02-22 Docs: Update linux-x86-64/NOTE, document signal(), _signal()
+2021-02-22 Fix: Makefile, install and lint targets
+2021-02-22 Linux/x86-64 signal() now returns ENOSYS
+2021-02-22 Docs: Add README.md
+2021-02-22 Docs: Rename README -> README_ORIG
+2021-02-16 Docker: Add Dockerfile
+2021-02-16 Linux: Fix ar command for latest toolchain
+2021-02-12 Fix tests
+2021-02-12 Remove unused preargs(), genalignstack()
+2021-02-12 Remove unused functions and prototypes
+2021-02-12 Darwin: Fix C_wait return code
+2021-02-12 Darwin: Refactor crt0-darwin-x86-64.s
+2021-02-11 Darwin: Pass most tests, including triple-test
+2021-02-11 Support stack alignment in the code generator
+2021-02-11 Darwin: Fix 32 bit return values from system C library
+2021-02-09 Darwin: Fix as command
+2021-02-05 Darwin: Fork init-darwin.c, system-darwin.c from unix versions
 2016-12-12 Fix: char c=-2; stored -2, but char is unsigned. (also by Volkmar)
 2016-12-01 Fix: f(a[1] && a[0]) would generate wrong code. Thanks, Volkmar!
 2016-11-28 Fix: (a,1),2 would generate wrong code. (also by Volkmar)

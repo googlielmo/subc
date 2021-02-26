@@ -1,17 +1,17 @@
-SNAP=	20140420
-REL=	20161212
+SNAP=	20161212
+REL=	20210227
 ARC=	subc-$(SNAP).tgz
 DIST=	subc-$(REL).tgz
 
+OS := $(shell uname -s)
+ifeq ($(OS),Darwin)
+	TAROPTS= --no-mac-metadata
+endif
+
+SUM= cksum
+
 default:
-	@echo "Valid targets include:"
-	@echo
-	@echo "	configure"
-	@echo "	scc"
-	@echo "	docker-build"
-	@echo "	docker-run"
-	@echo
-	@echo "Use 'make configure' followed by 'make scc' to build scc."
+	@echo "Use 'make configure' followed by 'make install' to build and install scc."
 
 configure: clean
 	./configure
@@ -19,20 +19,19 @@ configure: clean
 all:
 	cd src && make all
 
-scc:
-	cd src && make scc
-
 install: all
 	cd src && make install
 
 tests: all
 	cd src && make tests
 
-csums:
-	csum -u <_sums >_newsums ; mv -f _newsums _sums
+csums:	clean
+	sort -k 3 _sums > _oldsums
+	find . -type f | grep -v .git | grep -v .idea | grep -v sums | sort | xargs $(SUM) >_newsums
+	diff -w _oldsums _newsums || true ; rm _oldsums _newsums
 
 sums:	clean
-	find . -type f | grep -v _sums | csum >_sums
+	find . -type f | grep -v .git | grep -v .idea | grep -v sums | sort | xargs $(SUM) >_sums
 
 version:
 	vi src/defs.h Makefile Changes
@@ -50,7 +49,21 @@ arc:	clean
 	tar cvfz $(ARC) *
 
 dist:	clean
-	(cd .. && tar cvfz $(DIST) subc) && mv ../$(DIST) .
+	(cd .. && tar -cvz -f $(DIST) \
+		--numeric-owner --no-acls $(TAROPTS) \
+		--exclude .git \
+		--exclude .gitignore \
+		--exclude .idea \
+		--exclude _newsums \
+		--exclude src/cg.c \
+                --exclude src/cg.h \
+                --exclude src/sys.h \
+                --exclude src/include/limits.h \
+                --exclude src/lib/crt0.s \
+                --exclude src/lib/init.c \
+                --exclude src/lib/ncrt0.s \
+                --exclude src/lib/system.c \
+		subc) && mv ../$(DIST) .
 
 docker-build:
 	docker build . -t subc

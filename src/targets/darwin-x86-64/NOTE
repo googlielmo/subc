@@ -1,2 +1,13 @@
 This port depends on the system libc (libc.dylib).
 Watch out for libc-related bugs!
+
+To build SubC on macOS >= 10.15 you need Clang and the Xcode command line
+tools, which you can install with:
+
+    $ xcode-select --install
+
+Make sure the /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/
+directory exists.
+
+To build for a different macOS version start by changing paths and options
+in src/sys.h (symlink for src/targets/darwin-x86-64/sys-darwin-x86-64.h).
