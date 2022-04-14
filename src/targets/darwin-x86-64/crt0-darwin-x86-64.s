@@ -42,12 +42,11 @@ _main:
 	movl	-4(%rbp),%ecx
 	pushq	%rcx		# argc
 	call	Cmain
-	addq	$16,%rsp
 
-	addq    $32, %rsp
-	movq	%rbp,%rsp
-	popq	%rbp
-	ret
+    movq	%rax,%rdi			# rc
+    andq    $~0xf,%rsp
+    call	_exit
+    hlt
 
 # internal switch(expr) routine
 # %rsi = switch table, %rax = expr

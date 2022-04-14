@@ -6,8 +6,8 @@ tools, which you can install with:
 
     $ xcode-select --install
 
-Make sure the /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/
+Make sure the /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/
 directory exists.
 
 To build for a different macOS version start by changing paths and options
-in src/sys.h (symlink for src/targets/darwin-x86-64/sys-darwin-x86-64.h).
+in src/sys.h (symlink to src/targets/darwin-x86-64/sys-darwin-x86-64.h).
