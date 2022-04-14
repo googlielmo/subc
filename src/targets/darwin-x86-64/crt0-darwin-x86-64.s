@@ -24,10 +24,10 @@ Cenviron:
 _main:
 	pushq	%rbp
 	movq	%rsp,%rbp
-	subq    $32, %rsp
-	movl    %edi, -4(%rbp)	# argc
-	movq    %rsi, -16(%rbp)	# argv
-	movq    %rdx, -24(%rbp)	# envp
+	subq	$32,%rsp
+	movl	%edi,-4(%rbp)	# argc
+	movq	%rsi,-16(%rbp)	# argv
+	movq	%rdx,-24(%rbp)	# envp
 
 	pushq	%rdi
 	call	C_init	#INIT
@@ -43,10 +43,10 @@ _main:
 	pushq	%rcx		# argc
 	call	Cmain
 
-    movq	%rax,%rdi			# rc
-    andq    $~0xf,%rsp
-    call	_exit
-    hlt
+	movq	%rax,%rdi			# rc
+	andq	$~0xf,%rsp
+	call	_exit
+	hlt
 
 # internal switch(expr) routine
 # %rsi = switch table, %rax = expr
@@ -103,14 +103,14 @@ vok:	movq	8(%rsp),%rdx	# env
 	.globl	C_exit
 C_exit:
 	movq	8(%rsp),%rdi			# rc
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 
 	call	_exit
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _sbrk(int size);
@@ -118,15 +118,15 @@ C_exit:
 	.globl	C_sbrk
 C_sbrk:
 	movq	8(%rsp),%rdi			# size
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_sbrk
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _write(int fd, void *buf, int len);
@@ -136,15 +136,15 @@ C_write:
 	movq	24(%rsp),%rdx			# len
 	movq	16(%rsp),%rsi			# buf
 	movq	8(%rsp),%rdi			# fd
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_write
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _read(int fd, void *buf, int len);
@@ -154,15 +154,15 @@ C_read:
 	movq	24(%rsp),%rdx			# len
 	movq	16(%rsp),%rsi			# buf
 	movq	8(%rsp),%rdi			# fd
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_read
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _lseek(int fd, int pos, int how);
@@ -172,15 +172,15 @@ C_lseek:
 	movq	24(%rsp),%rdx			# how
 	movq	16(%rsp),%rsi			# pos
 	movq	8(%rsp),%rdi			# fd
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_lseek
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _creat(char *path, int mode);
@@ -189,16 +189,16 @@ C_lseek:
 C_creat:
 	movq	16(%rsp),%rsi			# mode
 	movq	8(%rsp),%rdi			# path
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_creat
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _open(char *path, int flags);
@@ -207,16 +207,16 @@ C_creat:
 C_open:
 	movq	16(%rsp),%rsi			# flags
 	movq	8(%rsp),%rdi			# path
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_open
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _close(int fd);
@@ -224,16 +224,16 @@ C_open:
 	.globl	C_close
 C_close:
 	movq	8(%rsp),%rdi			# fd
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_close
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _unlink(char *path);
@@ -241,15 +241,15 @@ C_close:
 	.globl	C_unlink
 C_unlink:
 	movq	8(%rsp),%rdi			# path
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 
 	call	_unlink
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _rename(char *old, char *new);
@@ -258,31 +258,31 @@ C_unlink:
 C_rename:
 	movq	16(%rsp),%rsi			# new
 	movq	8(%rsp),%rdi			# old
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_rename
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _fork(void);
 	.text
 	.globl	C_fork
 C_fork:
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 
 	call	_fork
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _wait(int *rc);
@@ -292,16 +292,16 @@ ww:	.quad	0
 	.globl	C_wait
 C_wait:
 	leaq	ww(%rip),%rdi
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_wait
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 
 	movq	8(%rsp),%rdx			# rc
 	pushq	%rax
@@ -326,15 +326,15 @@ C_execve:
 	movq	24(%rsp),%rdx			# envp
 	movq	16(%rsp),%rsi			# argv
 	movq	8(%rsp),%rdi			# path
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 
 	call	_execve
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int _time(void);
@@ -342,44 +342,44 @@ C_execve:
 	.globl	C_time
 C_time:
 	xorq	%rdi,%rdi
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 
 	call	_time
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int raise(int sig);
 	.text
 	.globl	Craise
 Craise:
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_getpid
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 
 	movq	%rax,%rdi
 	movq	8(%rsp),%rsi			# sig
 
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 	xorq	%rax,%rax
 
 	call	_kill
 	cltq
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 
 # int signal(int sig, int (*fn)());
@@ -388,12 +388,12 @@ Craise:
 Csignal:
 	movq	16(%rsp),%rsi			# fn
 	movq	8(%rsp),%rdi			# sig
-	pushq   %rbp
-	movq    %rsp,%rbp
-	andq    $~0xf,%rsp
+	pushq	%rbp
+	movq	%rsp,%rbp
+	andq	$~0xf,%rsp
 
 	call	_signal
 
-	movq    %rbp,%rsp
-	popq    %rbp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
