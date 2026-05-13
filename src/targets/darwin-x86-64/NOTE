@@ -9,5 +9,7 @@ tools, which you can install with:
 Make sure the /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/
 directory exists.
 
-To build for a different macOS version start by changing paths and options
-in src/sys.h (symlink to src/targets/darwin-x86-64/sys-darwin-x86-64.h).
+To build and link for a different macOS version, set
+SUBC_DARWIN_VERSION_MIN before running build/test commands, e.g.:
+
+    $ SUBC_DARWIN_VERSION_MIN=13.0 make tests

@@ -19,6 +19,9 @@ configure: clean
 all:
 	cd src && make all
 
+dirs:
+	cd src && make dirs
+
 install: all
 	cd src && make install
 

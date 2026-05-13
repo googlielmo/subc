@@ -34,7 +34,8 @@ LIBOBJS=lib/init.o lib/abort.o lib/abs.o lib/atexit.o lib/atoi.o \
 
 OS := $(shell uname -s)
 ifeq ($(OS),Darwin)
-	export MACOSX_DEPLOYMENT_TARGET = 10.15
+	MACOSX_DEPLOYMENT_TARGET ?= 10.15
+	export MACOSX_DEPLOYMENT_TARGET
 	export ZERO_AR_DATE = 1
 endif
 
@@ -51,7 +52,7 @@ scc1:	scc0 lib/crt0.o lib/libscc.a $(SRC)
 	./scc0 -o scc1 $(SRC)
 
 scc0:	$(SRC)
-	$(CC) -o scc0 $(SRC)
+	$(CC) $(CFLAGS) -o scc0 $(SRC)
 
 lib:	lib/libscc.a
 
