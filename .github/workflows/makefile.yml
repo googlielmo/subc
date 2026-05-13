@@ -5,24 +5,42 @@ on:
     branches: [ main, github-workflow ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Select a single platform or run all"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - &target_ubuntu_latest ubuntu-latest
+          - &target_macos_min_supported macos-15-intel
+          - &target_macos_latest macos-26-intel
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-10.15, macos-11 ]
+        os:
+          - *target_ubuntu_latest
+          - *target_macos_min_supported
+          - *target_macos_latest
 
     steps:
       - uses: actions/checkout@v3
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.target == 'all' || matrix.os == github.event.inputs.target
 
       - name: Configure
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.target == 'all' || matrix.os == github.event.inputs.target
         run: make configure
 
       - name: Build scc
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.target == 'all' || matrix.os == github.event.inputs.target
         run: make all
 
       - name: Run checks
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.target == 'all' || matrix.os == github.event.inputs.target
         run: make tests
