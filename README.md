@@ -24,7 +24,9 @@ Updated by Guglielmo Nigri
 
 Source code available at: https://github.com/googlielmo/subc
 
-- Darwin target now *stable* (tested on macOS 10.15 and 11.1)
+- Darwin target now *stable* (tested on macOS 10.15 and 15.7)
+- Updated Darwin/macOS support for recent macOS toolchains and
+  releases
 - Ongoing work to update Linux x86-64 target to the latest tool 
   chain
 - Docker support
@@ -368,11 +370,10 @@ executables.
 INSTALLING THE COMPILER
 -----------------------
 
-The easy way would be to set up the PREFIX (and optionally
-SCCDIR and BINDIR) variables in `src/Makefile` to suit your
-taste and then run
+The easy way is to set up the `PREFIX` (and optionally
+`SCCDIR` and `BINDIR`) variables and then run:
 
-    make dirs	# to create the directories
+    make dirs
     make install
 
 If you want to install the SubC compiler manually, you will
@@ -394,6 +395,16 @@ The headers (`include/*`) go to `INSTALLDIR/include`, the library
 To test the installation just re-compile the compiler:
 
     rm scc && scc -o scc *.c
+
+Example: stage a local install under `/private/tmp`:
+
+    make dirs PREFIX=/private/tmp/subc-install-stage
+    make install PREFIX=/private/tmp/subc-install-stage
+
+On Darwin/macOS, you can override the minimum target version used by
+the SubC driver with:
+
+    SUBC_DARWIN_VERSION_MIN=13.0 make tests
 
 
 DOS SUPPORT
